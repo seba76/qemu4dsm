@@ -1,0 +1,18 @@
+{
+  ".url": {
+    "com.seba.qemu4dsm": {
+      "type": "legacy",
+      "allUsers": false,
+      "title": "qemu4dsm",
+      "desc": "QEMU (short for Quick Emulator)",
+      "icon": "images/qemu_{0}.png",
+      "protocol": "http",
+      "url": "/webman/3rdparty/qemu4dsm/app/static/index.html",
+      "port": 80,
+      "urlType": 2,
+      "appWindow": "com.seba.qemu4dsm",
+      "allowMultiInstance": false,
+      "urlDetail": null
+    }
+  }
+}

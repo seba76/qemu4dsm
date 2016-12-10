@@ -1,0 +1,12 @@
+# SynoBuildConf/depends
+
+[BuildDependent]
+# each line here is a dependent project
+gnutls-3.3.x
+libpng
+
+[ReferenceOnly]
+# each line here is a project for reference only but no need to be built
+
+[default]
+all="6.0" # build environment for other platforms should be DSM 5.1

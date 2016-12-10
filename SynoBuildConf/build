@@ -1,0 +1,64 @@
+#!/bin/bash
+
+touch /logs/qemu4dsm.build
+
+# if env MakeClean is set to yes clean
+case ${MakeClean} in
+	[Yy][Ee][Ss])
+		[ -d build ] && cd build && make distclean
+		;;
+esac
+
+PKG_NAME="qemu4dsm"
+INST_DIR="/tmp/_${PKG_NAME}"
+PKG_DIR="/tmp/_${PKG_NAME}_pkg"
+PKG_DEST="/image/packages"
+PREFIX=/opt/qemu
+SRC=$(pwd)
+
+echo "Starting build of qemu4dsm in ${SRC}, extracting source tarball"
+
+[ -d $PREFIX ] && rm -rf $PREFIX
+mkdir $PREFIX
+tar xf qemu-2.7.0.tar.bz2 -C .
+mv qemu-2.7.0 qemu/
+cd qemu
+mkdir build
+
+LIBPNG_INCS="$(pkg-config libpng --cflags)"
+LIBPNG_LIBS="$(pkg-config libpng --libs)"
+
+GNUTLS_INCS="$(pkg-config gnutls --cflags)"
+GNUTLS_LIBS="$(pkg-config gnutls --libs)"
+
+CFLAGS="${CFLAGS} ${GNUTLS_INCS} ${LIBPNG_INCS}"
+LDFLAGS="${LDFLAGS} ${GNUTLS_LIBS} ${LIBPNG_LIBS}"
+
+#    LD=/usr/local/x86_64-pc-linux-gnu/bin/x86_64-pc-linux-gnu-ld \
+#    RANLIB=/usr/local/x86_64-pc-linux-gnu/bin/x86_64-pc-linux-gnu-ranlib \
+
+echo "Entering ${SRC}/build"
+
+cd build
+env CC="${CC}" \
+	AR="${AR}" \
+    CFLAGS="${CFLAGS}" \
+    LDFLAGS="${LDFLAGS}" \
+../configure \
+    --prefix=$PREFIX \
+	--target-list="x86_64-softmmu i386-softmmu i386-linux-user x86_64-linux-user" \
+	--disable-guest-agent \
+	--disable-guest-agent-msi \
+	--disable-sdl \
+	--disable-gtk \
+	--disable-vte  \
+	--disable-cocoa \
+	--disable-docs \
+	--disable-libssh2 \
+	--disable-snappy \
+	--disable-bluez \
+	--disable-vnc-jpeg \
+	--enable-kvm
+	
+echo "Running make"
+make ${MAKE_FLAGS}

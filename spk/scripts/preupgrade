@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ -f /var/packages/qemu4dsm/target/ui/data.json ] && cp /var/packages/qemu4dsm/target/ui/data.json /tmp/qemu-data.json
+
+exit 0

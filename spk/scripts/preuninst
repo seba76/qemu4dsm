@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ -L /opt/qemu ]; then
+	rm -f /opt/qemu
+	if [ ! "$(ls -A /opt)" ]; then
+		rmdir /opt
+	fi
+fi 
+
+exit 0

@@ -1,0 +1,56 @@
+#!/bin/bash
+
+PKG_NAME="qemu4dsm"
+INST_DIR="/tmp/_${PKG_NAME}"
+PKG_DIR="/tmp/_${PKG_NAME}_pkg"
+PKG_DEST="/image/packages"
+PREFIX=/opt/qemu
+SRC=$(pwd)
+
+PrepareDirs() {
+    for dir in $INST_DIR $PKG_DIR; do
+        rm -rf "$dir"
+    done
+    for dir in $INST_DIR $PKG_DIR $PKG_DEST; do
+        mkdir -p "$dir"
+    done
+}
+
+InstallQemu() {
+	cd qemu/build
+	echo "Running make install in $(pwd)"
+    DESTDIR="${INST_DIR}" make install
+	echo "Collecting few more files"
+	cd ..
+	cp ./scripts/qmp/qmp* ./scripts/qmp/qom* ${INST_DIR}${PREFIX}/bin
+	mkdir ${INST_DIR}${PREFIX}/lib
+	cp /usr/local/lib/libpng* ${INST_DIR}${PREFIX}/lib
+	cd ..
+    cp -r package/ui/ ${INST_DIR}
+}
+
+GenerateINFO() {
+    ./INFO.sh > spk/INFO
+    cp spk/INFO "${PKG_DIR}"
+}
+
+InstallSynologyConfig(){
+    cp -r spk/scripts/ "${PKG_DIR}"
+    cp spk/PACKAGE_ICON{,_256}.PNG "${PKG_DIR}"
+}
+
+MakePackage() {
+    source /pkgscripts/include/pkg_util.sh
+    pkg_make_package $INST_DIR $PKG_DIR
+    pkg_make_spk $PKG_DIR $PKG_DEST
+}
+
+main() {
+    PrepareDirs
+    InstallQemu
+    GenerateINFO
+    InstallSynologyConfig
+    MakePackage 
+}
+
+main "$@"
