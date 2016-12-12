@@ -1,7 +1,0 @@
-#!/bin/sh
-
-[ ! -d /opt ] && mkdir /opt
-[ ! -d /opt/qemu ] && ln -s /var/packages/qemu4dsm/target/opt/qemu /opt/qemu
-[ -f /tmp/qemu-data.json ] && mv /tmp/qemu-data.json /var/packages/qemu4dsm/target/ui/data.json && cd /var/packages/qemu4dsm/target/ui/ && ./cmd.py
-
-exit 0
