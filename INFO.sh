@@ -1,7 +1,7 @@
 # INFO.sh
 . /pkgscripts/include/pkg_util.sh
 package="qemu4dsm"
-version="0.0.33"
+version="0.0.35"
 maintainer="seba"
 maintainer_url="http://github.com/seba-0"
 displayname="qemu4dsm"
@@ -9,6 +9,7 @@ distributor="seba"
 distributor_url="http://github.com/seba-0"
 arch="x86_64"
 exclude_arch="x86 cedarview dockerx64 kvmx64"
+install_dep_packages="PythonModule"
 firmware="6.0-7312"
 report_url="http://github.com/seba-0/qemu4dsm/issues"
 dsmuidir="ui"
