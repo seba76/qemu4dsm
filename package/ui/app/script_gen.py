@@ -46,7 +46,7 @@ take-screenshot)
     take_screenshot $SOCKET $VMNAME
 	;;
 init)
-	init tap{0}
+	{3}
 	;;
 *)
     echo "Usage: $0 (start|stop|status|shell|force-stop|init|take-screenshot)"
@@ -57,13 +57,16 @@ esac
 exit 0
 '''
 
-def create_qemu_cmd(vm):
-    cmd = None
+def create_init_cmd(vm):
+    cmd = ''
     if vm['net1type'] == 'bridge':
-        cmd = 'init tap{0}\n  '.format(vm['id'])
+        cmd = 'init tap{0} ovs_{1}\n  '.format(vm['id'], vm['net1bridge'])
     else:
         cmd = 'init\n  '
+    return cmd
 
+def create_qemu_cmd(vm):
+    cmd = create_init_cmd(vm)
     cmd += '''qemu-system-x86_64  \\
     -machine {0} \\
     -m {1} \\
@@ -118,7 +121,7 @@ def generate_script(id):
 
     if selectedVm is not None:
         qemuLine = create_qemu_cmd(selectedVm)
-        scr = script.format(selectedVm['id'], qemuLine, selectedVm['name'])
+        scr = script.format(selectedVm['id'], qemuLine, selectedVm['name'], create_init_cmd(selectedVm))
         name = 'run-{0}.sh'.format(selectedVm['name'])
         with open(name, 'w') as f:
             f.write(scr)
