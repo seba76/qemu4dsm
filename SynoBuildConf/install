@@ -25,6 +25,9 @@ InstallQemu() {
 	cp ./scripts/qmp/qmp* ./scripts/qmp/qom* ${INST_DIR}${PREFIX}/bin
 	mkdir ${INST_DIR}${PREFIX}/lib
 	cp /usr/local/lib/libpng* ${INST_DIR}${PREFIX}/lib
+	cp /usr/local/lib/libcelt051* ${INST_DIR}${PREFIX}/lib
+	cp /usr/local/lib/libpixman-1* ${INST_DIR}${PREFIX}/lib
+	cp /usr/local/lib/libspice-server* ${INST_DIR}${PREFIX}/lib
 	cd ..
     cp -r package/ui/ ${INST_DIR}
 }

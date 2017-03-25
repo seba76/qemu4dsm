@@ -15,6 +15,7 @@ PATH=$PATH:/opt/qemu/bin
 SOCKET=/var/run/qemu-vm{0}.qmp
 PIDFILE=/var/run/qemu-vm{0}.pid
 VMNAME={2}
+export LD_LIBRARY_PATH=/var/packages/qemu4dsm/target/opt/qemu/lib
 
 . ${{SCRIPTPATH}}/vm-helpers.sh
 
@@ -207,6 +208,7 @@ def exec_create_disk(filename, fmt, size, options):
     try:
         # qemu-img create [-f fmt] [-o options] filename [size]
         my_env = os.environ.copy()
+		my_env["LD_LIBRARY_PATH"] = "/var/packages/qemu4dsm/target/opt/qemu/lib"
         my_env["PATH"] = "/opt/qemu/bin:" + my_env["PATH"]
         abs_path = os.path.abspath(filename)
         if abs_path.startswith('/volume') == False:

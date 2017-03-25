@@ -148,7 +148,7 @@ create_tap_ovs() {
       sleep 0.5s
       /bin/ovs-vsctl add-port $switch $tap
       sleep 0.5s
-      ip link set ovs_system up
+      ip link set ovs-system up
     else
       echo "Info: ${tap} exists."
     fi

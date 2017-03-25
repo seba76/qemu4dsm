@@ -22,8 +22,21 @@ echo "Starting build of qemu4dsm in ${SRC}, extracting source tarball"
 mkdir $PREFIX
 tar xf qemu-2.7.0.tar.bz2 -C .
 mv qemu-2.7.0 qemu/
-cd qemu
-mkdir build
+mkdir -p qemu/build
+cd qemu/build
+
+# List search path: pkg-config --variable pc_path pkg-config
+export PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:/usr/local/share/pkgconfig:/usr/local/lib/pkgconfig" 
+
+#LIBSPICE_INCS="-I/usr/local/include/spice-server"
+#LIBSPICE_LIBS="-L/usr/local/lib -lspice-server"
+LIBSPICE_INCS="$(pkg-config spice-server --incs)"
+LIBSPICE_LIBS="$(pkg-config spice-server --libs)"
+
+#LIBSPICEPROTO_INCS="-I/usr/local/include/spice-1"
+#LIBSPICEPROTO_LIBS="$(pkg-config spice --libs)"
+LIBSPICEPROTO_INCS="$(pkg-config spice-protocol --libs)"
+LIBSPICEPROTO_LIBS="$(pkg-config spice-protocol --libs)"
 
 LIBPNG_INCS="$(pkg-config libpng --cflags)"
 LIBPNG_LIBS="$(pkg-config libpng --libs)"
@@ -31,15 +44,14 @@ LIBPNG_LIBS="$(pkg-config libpng --libs)"
 GNUTLS_INCS="$(pkg-config gnutls --cflags)"
 GNUTLS_LIBS="$(pkg-config gnutls --libs)"
 
-CFLAGS="${CFLAGS} ${GNUTLS_INCS} ${LIBPNG_INCS}"
-LDFLAGS="${LDFLAGS} ${GNUTLS_LIBS} ${LIBPNG_LIBS}"
+CFLAGS="${CFLAGS} ${GNUTLS_INCS} ${LIBPNG_INCS} ${LIBSPICE_INCS} ${LIBSPICEPROTO_INCS}"
+LDFLAGS="${LDFLAGS} ${GNUTLS_LIBS} ${LIBPNG_LIBS} ${LIBSPICE_LIBS} ${LIBSPICEPROTO_LIBS}"
 
 #    LD=/usr/local/x86_64-pc-linux-gnu/bin/x86_64-pc-linux-gnu-ld \
 #    RANLIB=/usr/local/x86_64-pc-linux-gnu/bin/x86_64-pc-linux-gnu-ranlib \
 
 echo "Entering ${SRC}/build"
 
-cd build
 env CC="${CC}" \
 	AR="${AR}" \
     CFLAGS="${CFLAGS}" \
@@ -58,6 +70,7 @@ env CC="${CC}" \
 	--disable-snappy \
 	--disable-bluez \
 	--disable-vnc-jpeg \
+	--enable-spice \
 	--enable-kvm
 	
 echo "Running make"

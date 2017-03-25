@@ -1,7 +1,7 @@
 # INFO.sh
 . /pkgscripts/include/pkg_util.sh
 package="qemu4dsm"
-version="0.0.39"
+version="0.0.43"
 maintainer="seba"
 maintainer_url="http://github.com/seba-0"
 displayname="qemu4dsm"
