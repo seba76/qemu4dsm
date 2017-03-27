@@ -95,7 +95,7 @@ def create_qemu_cmd(vm):
     elif vm['net1type'] == 'bridge':
         cmd += '    -net nic,netdev=id,macaddr={0} \\\n'.format(vm['net1mac'])
         cmd += '    -netdev tap,id=id,ifname=tap{0},script=no,downscript=no \\\n'.format(vm['id'])
-        
+
     if vm['hda'] != None and len(vm['hda']) > 0:
         cmd += '    -hda {0} \\\n'.format(vm['hda'])
     if vm['hdb'] != None and len(vm['hdb']):
@@ -113,7 +113,7 @@ def create_qemu_cmd(vm):
 def generate_script(id):
     with open(JSON_STORE) as data_file:    
         data = json.load(data_file)
-        
+
     selectedVm = None
     for vm in data['virtualmachine']:
         if vm['id'] == id:
@@ -128,22 +128,22 @@ def generate_script(id):
             f.write(scr)
         subprocess.call(['chmod', '755', name])
         return True
-    
+
     return False
 
 def remove_script(id):
     try:
         script = get_script_name(id)
         if script != None:
-			os.remove(script)            
+            os.remove(script)
     except:
         log.error("Unexpected error: {0}".format(sys.exc_info()[0]))
         pass
 
 def get_script_name(id):
-    with open(JSON_STORE) as data_file:    
+    with open(JSON_STORE) as data_file:
         data = json.load(data_file)
-        
+
     selectedVm = None
     for vm in data['virtualmachine']:
         if vm['id'] == id:
@@ -208,7 +208,7 @@ def exec_create_disk(filename, fmt, size, options):
     try:
         # qemu-img create [-f fmt] [-o options] filename [size]
         my_env = os.environ.copy()
-		my_env["LD_LIBRARY_PATH"] = "/var/packages/qemu4dsm/target/opt/qemu/lib"
+        my_env["LD_LIBRARY_PATH"] = "/var/packages/qemu4dsm/target/opt/qemu/lib"
         my_env["PATH"] = "/opt/qemu/bin:" + my_env["PATH"]
         abs_path = os.path.abspath(filename)
         if abs_path.startswith('/volume') == False:
@@ -220,7 +220,7 @@ def exec_create_disk(filename, fmt, size, options):
         else:
             log.debug("Disk create: -f {0} {1} {2}".format(fmt, abs_path, size))
             code = subprocess.call(['/opt/qemu/bin/qemu-img', 'create', '-f', fmt, abs_path, size], env=my_env)
-        
+
         return code
     except:
         log.error("Unexpected error: {0}".format(sys.exc_info()[0]))
