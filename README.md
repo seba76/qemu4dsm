@@ -1,3 +1,6 @@
+[![Github All Releases](https://img.shields.io/github/downloads/seba76/qemu4dsm/total.svg)](https://github.com/seba76/qemu4dsm)
+[![Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://paypal.me/seba76/)
+___
 # qemu4dsm
 QEMU application and basic frontend for QEMU for x86_64 based Synology NAS servers running DSM 6.0.2. This package supports NAS servers with x86_64 architecture excluding x86, cedarview, dockerx64 and kvmx64.
 
